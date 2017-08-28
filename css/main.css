@@ -1,0 +1,11 @@
+.header {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
