@@ -9,3 +9,8 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.column {
+  display: flex;
+  justify-content: center;
+}
