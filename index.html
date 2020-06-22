@@ -1,69 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html class="no-js" lang="">
+
 <head>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111997269-2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-111997269-2');
-  </script>
-
-
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Justin Hong</title>
+  <title></title>
   <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
 
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
   <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/skeleton.css">
   <link rel="stylesheet" href="css/main.css">
 
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="images/favicon.png">
-
+  <meta name="theme-color" content="#fafafa">
 </head>
+
 <body>
 
-  <!-- Primary Page Layout
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <div class="container">
-    <div class="row header">
-      <h2>Justin Hong</h2>
-      <a class="button button-primary">About Me</a>
-      <a class="button" href="./jjhong_resume.pdf">Resume/CV</a>
-      <a class="button" href="slides.html">Slides</a>
-    </div>
-    <div class="row">
-      <div class="one-half column">
-        <p>
-          I am a third-year undergraduate at UC Berkeley studying Computer Science
-          and Molecular Biology (Immunology Track). I am currently working as an
-          undergraduate student instructor for Berkeley's Intro CS Course, CS61A.
-        </p>
-      </div>
-      <div class="one-half column headpic">
-        <img src="./images/justin_hong.png" alt="Justin Hong" height="200">
-      </div>
-    </div>
-  </div>
+  <!-- Add your site or application content here -->
+  <p>Hello world! This is Justin Hong.</p>
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
 
-<!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.15.3/firebase-app.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.15.3/firebase-analytics.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyCXnS4JPWsSUWh0WKFIYePZ5TVITihKheg",
+      authDomain: "jjhong922-personal-website.firebaseapp.com",
+      databaseURL: "https://jjhong922-personal-website.firebaseio.com",
+      projectId: "jjhong922-personal-website",
+      storageBucket: "jjhong922-personal-website.appspot.com",
+      messagingSenderId: "134310551512",
+      appId: "1:134310551512:web:d372da0e90c82978ab5cad",
+      measurementId: "G-DHLX0T7Q72"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
 </body>
+
 </html>
