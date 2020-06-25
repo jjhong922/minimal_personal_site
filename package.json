@@ -12,6 +12,31 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.4"
+    "@babel/core": "^7.10.3",
+    "@babel/plugin-transform-react-jsx": "^7.10.3",
+    "@types/jquery": "^3.5.0",
+    "jquery": "^3.5.1",
+    "parcel-bundler": "^1.12.4",
+    "preact": "^10.4.4",
+    "preact-material-components": "^1.6.1"
+  },
+  "babel": {
+    "plugins": [
+      [
+        "@babel/plugin-transform-react-jsx",
+        {
+          "pragma": "h",
+          "pragmaFrag": "Fragment"
+        }
+      ]
+    ]
+  },
+  "alias": {
+    "react": "preact/compat",
+    "react-dom/test-utils": "preact/test-utils",
+    "react-dom": "preact/compat"
+  },
+  "dependencies": {
+    "linkstate": "^1.1.1"
   }
 }
