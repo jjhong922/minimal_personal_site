@@ -43,6 +43,5 @@ export const centeredCoordToWindowCoord = (xPos, yPos) => {
   const width = $(window).width();
   const originY = height / 2;
   const originX = width / 2;
-  console.log(xPos, yPos);
   return [xPos + originX, yPos + originY];
 }

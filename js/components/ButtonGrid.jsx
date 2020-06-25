@@ -10,7 +10,6 @@ class GridSquare extends Component {
   }
 
   render({ xPos, yPos }, { colorID }) {
-    console.log(xPos, yPos);
     return (
       <Button
         className="grid-square"
