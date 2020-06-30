@@ -5,6 +5,7 @@
   "keywords": "",
   "license": "",
   "author": "",
+  "type": "module",
   "scripts": {
     "build": "parcel build index.html",
     "dev": "parcel index.html --open",
@@ -18,6 +19,7 @@
     "jquery": "^3.5.1",
     "parcel-bundler": "^1.12.4",
     "preact": "^10.4.4",
+    "preact-feather": "^4.1.0",
     "preact-material-components": "^1.6.1"
   },
   "babel": {
@@ -37,6 +39,7 @@
     "react-dom": "preact/compat"
   },
   "dependencies": {
+    "firebase": "^7.15.5",
     "linkstate": "^1.1.1"
   }
 }

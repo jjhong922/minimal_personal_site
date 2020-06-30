@@ -1,38 +1,79 @@
 import { h, render, Component } from 'preact';
 import { Button } from 'preact-material-components';
-import { GRID_SQUARE_HEIGHT, GRID_SQUARE_WIDTH, THEME_COLORS } from '../helper/constants';
-import { getCenteredGridSquareCoords, centeredCoordToWindowCoord } from '../helper/helpers';
+import { GRID_SQUARE_HEIGHT, GRID_SQUARE_WIDTH, THEME_COLORS, DEFAULT_COLOR, NAME_CARD_COORD, LINK_COORDS } from '../helper/constants';
+import { getCenteredGridSquareCoords, centeredCoordToWindowCoord, centeredCoordToUnitCoord, unitCoordToWindowCoord } from '../helper/helpers';
+import { db } from '../firebase';
 
 class GridSquare extends Component {
-  constructor() {
+  constructor({ x, y }) {
     super();
-    this.state = { colorID: 0 };
+    this.docRef = db.collection("grid-squares").doc(`gs-${x}-${y}`);
   }
 
-  render({ xPos, yPos }, { colorID }) {
+  render({ x, y, colorID, numClicked }) {
+    const bgColor = colorID == -1 ? DEFAULT_COLOR : THEME_COLORS[colorID];
+    const [xPos, yPos] = unitCoordToWindowCoord(x, y);
     return (
       <Button
-        className="grid-square"
+        className="fixed-square grid-square"
         unelevated
         ripple
         width={GRID_SQUARE_WIDTH}
         height={GRID_SQUARE_HEIGHT}
-        style={{left: xPos - GRID_SQUARE_WIDTH / 2, top: yPos - GRID_SQUARE_HEIGHT / 2, backgroundColor: THEME_COLORS[colorID]}}
-        onClick={() => this.setState({ colorID: (colorID + 1) % THEME_COLORS.length })}
+        style={{left: xPos - GRID_SQUARE_WIDTH / 2, top: yPos - GRID_SQUARE_HEIGHT / 2, backgroundColor: bgColor }}
+        onClick={() => this.docRef.set({ colorID: (colorID + 1) % THEME_COLORS.length, numClicked: numClicked + 1 })}
       />
     );
   }
 }
 
 export default class ButtonGrid extends Component {
-  render() {
-    var gridCoords = getCenteredGridSquareCoords();
-    var squares = [];
+  constructor() {
+    super();
+    this.gsMap = new Map();
+    db.collection("grid-squares").onSnapshot(querySnapshot => {
+      querySnapshot.docChanges().forEach(change => {
+        gsMap.set(change.doc.id, change.doc.data());
+      });
+      this.forceUpdate();
+    });
+  }
 
-    for (var i = 0; i < gridCoords.length; i++) {
+  render() {
+    let gridCoords = getCenteredGridSquareCoords();
+    let squares = [];
+    for (let i = 0; i < gridCoords.length; i++) {
       const coord = gridCoords[i];
-      const wCoord = centeredCoordToWindowCoord(coord[0], coord[1]);
-      squares.push(<GridSquare key={`gs-${coord[0]}-${coord[1]}`} xPos={wCoord[0]} yPos={wCoord[1]} />)
+      const [x, y] = centeredCoordToUnitCoord(coord[0], coord[1]);
+      let blocking = false;
+      if (
+        x >= NAME_CARD_COORD[0]
+        && x <= NAME_CARD_COORD[0] + 8
+        && y >= NAME_CARD_COORD[1]
+        && y <= NAME_CARD_COORD[1] + 1
+      ) {
+        blocking = true;
+      }
+      for (let j = 0; j < LINK_COORDS.length; j++) {
+        const [linkX, linkY] = LINK_COORDS[j];
+        if (x >= linkX && x <= linkX + 1 && y >= linkY && y <= linkY + 1) blocking = true;
+      }
+      if (blocking) continue;
+
+      let squareID = `gs-${x}-${y}`;
+      let colorID = -1;
+      let numClicked = 0;
+      if (this.gsMap.has(squareID)) {
+        colorID = gsMap.get(squareID).colorID;
+        numClicked = gsMap.get(squareID).numClicked;
+      };
+      squares.push(<GridSquare
+        key={squareID}
+        x={x}
+        y={y}
+        colorID
+        numClicked
+      />);
     }
 
     return (
