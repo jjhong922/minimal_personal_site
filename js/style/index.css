@@ -12,8 +12,8 @@ html, body {
 
   --grid-square-height: 40px;
   --grid-square-width: 40px;
-  --name-card-height: 82px; 
-  --name-card-width: 378px; 
+  --name-card-height: 82px;
+  --name-card-width: 378px;
   --link-square-height: 82px;
   --link-square-width: 82px;
 }
@@ -39,14 +39,14 @@ html, body {
   border-radius: 5px !important;
   padding: 0 !important;
 }
-  
+
 .grid-square {
   height: var(--grid-square-height) !important;
   width: var(--grid-square-width) !important;
   min-width: 0 !important;
   min-height: 0 !important;
 }
-  
+
 .name-card {
   height: var(--name-card-height) !important;
   width: var(--name-card-width) !important;
@@ -54,6 +54,7 @@ html, body {
   min-width: var(--name-card-width) !important;
   font-size: 20px !important;
   font-weight: 100 !important;
+  color: #2B2D2F !important;
 }
 
 .link-square {

@@ -6,7 +6,7 @@ import LinkSquare from './LinkSquare';
 
 export default class App extends Component {
   debouncedResizeHandler() {
-    return debounce(_ => this.forceUpdate(), 50);
+    return debounce(_ => this.forceUpdate(), 5);
   }
 
   componentDidMount() {

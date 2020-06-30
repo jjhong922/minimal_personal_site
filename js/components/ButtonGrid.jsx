@@ -10,7 +10,7 @@ class GridSquare extends Component {
     this.docRef = db.collection("grid-squares").doc(`gs-${x}-${y}`);
   }
 
-  render({ x, y, colorID, numClicked }) {
+  render({ x, y, colorID, numClicked, offline, offlineHandler }) {
     const bgColor = colorID == -1 ? DEFAULT_COLOR : THEME_COLORS[colorID];
     const [xPos, yPos] = unitCoordToWindowCoord(x, y);
     return (
@@ -21,7 +21,13 @@ class GridSquare extends Component {
         width={GRID_SQUARE_WIDTH}
         height={GRID_SQUARE_HEIGHT}
         style={{left: xPos - GRID_SQUARE_WIDTH / 2, top: yPos - GRID_SQUARE_HEIGHT / 2, backgroundColor: bgColor }}
-        onClick={() => this.docRef.set({ colorID: (colorID + 1) % THEME_COLORS.length, numClicked: numClicked + 1 })}
+        onClick={() => {
+          if (!offline) {
+            this.docRef.set({ colorID: (colorID + 1) % THEME_COLORS.length, numClicked: numClicked + 1 });
+          } else {
+            offlineHandler(`gs-${x}-${y}`, (colorID + 1) % THEME_COLORS.length, numClicked + 1);
+          }}
+        }
       />
     );
   }
@@ -30,13 +36,23 @@ class GridSquare extends Component {
 export default class ButtonGrid extends Component {
   constructor() {
     super();
+    this.offline = false;
     this.gsMap = new Map();
     db.collection("grid-squares").onSnapshot(querySnapshot => {
       querySnapshot.docChanges().forEach(change => {
-        gsMap.set(change.doc.id, change.doc.data());
+        this.gsMap.set(change.doc.id, change.doc.data());
       });
       this.forceUpdate();
+    },
+    error => {
+      this.offline = true;
+      this.forceUpdate();
     });
+  }
+
+  offlineHandler(squareID, colorID, numClicked) {
+    this.gsMap.set(squareID, { colorID, numClicked });
+    this.forceUpdate();
   }
 
   render() {
@@ -61,18 +77,20 @@ export default class ButtonGrid extends Component {
       if (blocking) continue;
 
       let squareID = `gs-${x}-${y}`;
-      let colorID = -1;
+      let colorID = this.offline ? 0 : -1;
       let numClicked = 0;
       if (this.gsMap.has(squareID)) {
-        colorID = gsMap.get(squareID).colorID;
-        numClicked = gsMap.get(squareID).numClicked;
+        colorID = this.gsMap.get(squareID).colorID;
+        numClicked = this.gsMap.get(squareID).numClicked;
       };
       squares.push(<GridSquare
         key={squareID}
         x={x}
         y={y}
-        colorID
-        numClicked
+        colorID={colorID}
+        numClicked={numClicked}
+        offline={this.offline}
+        offlineHandler={this.offlineHandler.bind(this)}
       />);
     }
 
