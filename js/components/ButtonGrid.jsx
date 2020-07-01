@@ -1,7 +1,7 @@
 import { h, render, Component } from 'preact';
 import { Button } from 'preact-material-components';
 import { GRID_SQUARE_HEIGHT, GRID_SQUARE_WIDTH, THEME_COLORS, DEFAULT_COLOR, NAME_CARD_COORD, LINK_COORDS } from '../helper/constants';
-import { getCenteredGridSquareCoords, centeredCoordToWindowCoord, centeredCoordToUnitCoord, unitCoordToWindowCoord } from '../helper/helpers';
+import { getRandomInt, getCenteredGridSquareCoords, centeredCoordToWindowCoord, centeredCoordToUnitCoord, unitCoordToWindowCoord } from '../helper/helpers';
 import { db } from '../firebase';
 
 class GridSquare extends Component {
@@ -10,24 +10,33 @@ class GridSquare extends Component {
     this.docRef = db.collection("grid-squares").doc(`gs-${x}-${y}`);
   }
 
-  render({ x, y, colorID, numClicked, offline, offlineHandler }) {
-    const bgColor = colorID == -1 ? DEFAULT_COLOR : THEME_COLORS[colorID];
+  render({ x, y, colorID, numClicked, offline, offlineHandler, secret, incrementSecret }) {
+    const bgColor = THEME_COLORS[colorID];
     const [xPos, yPos] = unitCoordToWindowCoord(x, y);
+    const delay = getRandomInt(5);
     return (
       <Button
-        className="fixed-square grid-square"
+        className={`fixed-square grid-square delay-${delay}`}
         unelevated
         ripple
         width={GRID_SQUARE_WIDTH}
         height={GRID_SQUARE_HEIGHT}
-        style={{left: xPos - GRID_SQUARE_WIDTH / 2, top: yPos - GRID_SQUARE_HEIGHT / 2, backgroundColor: bgColor }}
+        style={{
+          left: xPos - GRID_SQUARE_WIDTH / 2,
+            top: yPos - GRID_SQUARE_HEIGHT / 2,
+            backgroundColor: bgColor
+        }}
         onClick={() => {
           if (!offline) {
             this.docRef.set({ colorID: (colorID + 1) % THEME_COLORS.length, numClicked: numClicked + 1 });
           } else {
             offlineHandler(`gs-${x}-${y}`, (colorID + 1) % THEME_COLORS.length, numClicked + 1);
-          }}
-        }
+          }
+          if (secret == 0 && x == 0 && y == -3) { console.log("weLcome to my hiDDen pUzzLe! gooD LUck!"); incrementSecret(); }
+          if (secret == 1 && x == -2 && y == -2) { console.log("have yoU figUReD it oUt yet?"); incrementSecret(); }
+          if (secret == 2 && x == -1 && y == -4) { console.log("oR DiD yoU jUst get LUcky?"); incrementSecret(); }
+          if (secret == 3 && x == -1 && y == -5) { console.log("oh weLL, Dis is D enD. finD yoUR RewarD heRe!"); incrementSecret(); }
+        }}
       />
     );
   }
@@ -36,17 +45,19 @@ class GridSquare extends Component {
 export default class ButtonGrid extends Component {
   constructor() {
     super();
-    this.offline = false;
+    this.state = {
+      offline: false,
+      loaded: false,
+    }
     this.gsMap = new Map();
     db.collection("grid-squares").onSnapshot(querySnapshot => {
       querySnapshot.docChanges().forEach(change => {
         this.gsMap.set(change.doc.id, change.doc.data());
       });
-      this.forceUpdate();
+      this.setState({ loaded: true });
     },
     error => {
-      this.offline = true;
-      this.forceUpdate();
+      this.setState({ offline: true, loaded: true });
     });
   }
 
@@ -55,7 +66,8 @@ export default class ButtonGrid extends Component {
     this.forceUpdate();
   }
 
-  render() {
+  render({ secret, incrementSecret }, { offline, loaded }) {
+    if (!loaded) return null;
     let gridCoords = getCenteredGridSquareCoords();
     let squares = [];
     for (let i = 0; i < gridCoords.length; i++) {
@@ -77,7 +89,7 @@ export default class ButtonGrid extends Component {
       if (blocking) continue;
 
       let squareID = `gs-${x}-${y}`;
-      let colorID = this.offline ? 0 : -1;
+      let colorID = 0;
       let numClicked = 0;
       if (this.gsMap.has(squareID)) {
         colorID = this.gsMap.get(squareID).colorID;
@@ -89,8 +101,10 @@ export default class ButtonGrid extends Component {
         y={y}
         colorID={colorID}
         numClicked={numClicked}
-        offline={this.offline}
+        offline={offline}
         offlineHandler={this.offlineHandler.bind(this)}
+        secret={secret}
+        incrementSecret={incrementSecret}
       />);
     }
 

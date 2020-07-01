@@ -3,7 +3,7 @@ html, body {
 	width: 100%;
 	padding: 0;
 	margin: 0;
-	background: #FAFAFA;
+	background: #FFFFFF;
 	font-family: 'Helvetica Neue', arial, sans-serif;
 	font-weight: 400;
 	color: #444;
@@ -16,6 +16,58 @@ html, body {
   --name-card-width: 296px;
   --link-square-height: 82px;
   --link-square-width: 82px;
+}
+
+@-webkit-keyframes fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-moz-keyframes fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-o-keyframes fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.delay-0 {
+  -webkit-animation-delay: 0s !important;
+  -moz-animation-delay: 0s !important;
+  -0-animation-delay: 0s !important;
+  animation-delay: 0s !important;
+}
+
+.delay-1 {
+  -webkit-animation-delay: .8s !important;
+  -moz-animation-delay: .8s !important;
+  -0-animation-delay: .8s !important;
+  animation-delay: .8s !important;
+}
+
+.delay-2 {
+  -webkit-animation-delay: 1.4s !important;
+  -moz-animation-delay: 1.4s !important;
+  -0-animation-delay: 1.4s !important;
+  animation-delay: 1.4s !important;
+}
+
+.delay-4 {
+  -webkit-animation-delay: 1.8s !important;
+  -moz-animation-delay: 1.8s !important;
+  -0-animation-delay: 1.8s !important;
+  animation-delay: 1.8s !important;
+}
+
+.delay-5 {
+  -webkit-animation-delay: 2s !important;
+  -moz-animation-delay: 2s !important;
+  -0-animation-delay: 2s !important;
+  animation-delay: 2s !important;
 }
 
 * {
@@ -38,6 +90,11 @@ html, body {
   position: absolute !important;
   border-radius: 5px !important;
   padding: 0 !important;
+  opacity: 0;
+  -webkit-animation: fade-in 2s 1 forwards; /* Safari 4+ */
+  -moz-animation:    fade-in 2s 1 forwards; /* Fx 5+ */
+  -o-animation:      fade-in 2s 1 forwards; /* Opera 12+ */
+  animation:         fade-in 2s 1 forwards; /* IE 10+, Fx 29+ */
 }
 
 .grid-square {
@@ -55,7 +112,19 @@ html, body {
   font-size: 20px !important;
   font-weight: 100 !important;
   color: #2B2D2F !important;
+  z-index: 1;
+  cursor: default !important;
+  pointer-events: fill !important;
 }
+
+.name-card::before {
+  background-color: #FFFFFF !important;  
+}
+
+.name-card::after {
+  background-color: #FFFFFF !important;  
+}
+
 
 .link-square {
   height: var(--link-square-height) !important;

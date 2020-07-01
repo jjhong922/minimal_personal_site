@@ -13,6 +13,11 @@ export function debounce(fn, ms) {
   };
 };
 
+export function getRandomInt(max) {
+  max = Math.floor(max);
+  return Math.floor(Math.random() * max);
+}
+
 export const getCenteredGridSquareCoords = () => {
   const height = $(window).height();
   const width = $(window).width();
