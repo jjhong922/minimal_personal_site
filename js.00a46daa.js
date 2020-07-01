@@ -24944,6 +24944,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.debounce = debounce;
+exports.getRandomInt = getRandomInt;
 exports.unitCoordToWindowCoord = exports.centeredCoordToUnitCoord = exports.centeredCoordToWindowCoord = exports.windowCoordToCenteredCoord = exports.getCenteredGridSquareCoords = void 0;
 
 var JQuery = _interopRequireWildcard(require("jquery"));
@@ -24971,6 +24972,11 @@ function debounce(fn, ms) {
 }
 
 ;
+
+function getRandomInt(max) {
+  max = Math.floor(max);
+  return Math.floor(Math.random() * max);
+}
 
 var getCenteredGridSquareCoords = function getCenteredGridSquareCoords() {
   var height = $(window).height();
@@ -47202,7 +47208,9 @@ var NameCard = /*#__PURE__*/function (_Component) {
 
   _createClass(NameCard, [{
     key: "render",
-    value: function render() {
+    value: function render(_ref) {
+      var secret = _ref.secret;
+
       var _NAME_CARD_COORD = _slicedToArray(_constants.NAME_CARD_COORD, 2),
           x = _NAME_CARD_COORD[0],
           y = _NAME_CARD_COORD[1];
@@ -47214,11 +47222,15 @@ var NameCard = /*#__PURE__*/function (_Component) {
 
       return (0, _preact.h)(_preactMaterialComponents.Button, {
         className: "fixed-square name-card",
-        disabled: true,
         style: {
           left: xPos - _constants.GRID_SQUARE_WIDTH / 2,
           top: yPos - _constants.GRID_SQUARE_HEIGHT / 2,
           backgroundColor: _constants.DEFAULT_COLOR
+        },
+        onClick: function onClick() {
+          if (secret == 4) {
+            window.open("https://www.youtube.com/watch?v=oHg5SJYRHA0");
+          }
         }
       }, "Justin Hong");
     }
@@ -74372,16 +74384,19 @@ var GridSquare = /*#__PURE__*/function (_Component) {
           colorID = _ref2.colorID,
           numClicked = _ref2.numClicked,
           offline = _ref2.offline,
-          offlineHandler = _ref2.offlineHandler;
-      var bgColor = colorID == -1 ? _constants.DEFAULT_COLOR : _constants.THEME_COLORS[colorID];
+          offlineHandler = _ref2.offlineHandler,
+          secret = _ref2.secret,
+          incrementSecret = _ref2.incrementSecret;
+      var bgColor = _constants.THEME_COLORS[colorID];
 
       var _unitCoordToWindowCoo = (0, _helpers.unitCoordToWindowCoord)(x, y),
           _unitCoordToWindowCoo2 = _slicedToArray(_unitCoordToWindowCoo, 2),
           xPos = _unitCoordToWindowCoo2[0],
           yPos = _unitCoordToWindowCoo2[1];
 
+      var delay = (0, _helpers.getRandomInt)(5);
       return (0, _preact.h)(_preactMaterialComponents.Button, {
-        className: "fixed-square grid-square",
+        className: "fixed-square grid-square delay-".concat(delay),
         unelevated: true,
         ripple: true,
         width: _constants.GRID_SQUARE_WIDTH,
@@ -74399,6 +74414,26 @@ var GridSquare = /*#__PURE__*/function (_Component) {
             });
           } else {
             offlineHandler("gs-".concat(x, "-").concat(y), (colorID + 1) % _constants.THEME_COLORS.length, numClicked + 1);
+          }
+
+          if (secret == 0 && x == 0 && y == -3) {
+            console.log("weLcome to my hiDDen pUzzLe! gooD LUck!");
+            incrementSecret();
+          }
+
+          if (secret == 1 && x == -2 && y == -2) {
+            console.log("have yoU figUReD it oUt yet?");
+            incrementSecret();
+          }
+
+          if (secret == 2 && x == -1 && y == -4) {
+            console.log("oR DiD yoU jUst get LUcky?");
+            incrementSecret();
+          }
+
+          if (secret == 3 && x == -1 && y == -5) {
+            console.log("oh weLL, Dis is D enD. finD yoUR RewarD heRe!");
+            incrementSecret();
           }
         }
       });
@@ -74419,7 +74454,10 @@ var ButtonGrid = /*#__PURE__*/function (_Component2) {
     _classCallCheck(this, ButtonGrid);
 
     _this3 = _super2.call(this);
-    _this3.offline = false;
+    _this3.state = {
+      offline: false,
+      loaded: false
+    };
     _this3.gsMap = new Map();
 
     _firebase.db.collection("grid-squares").onSnapshot(function (querySnapshot) {
@@ -74427,11 +74465,14 @@ var ButtonGrid = /*#__PURE__*/function (_Component2) {
         _this3.gsMap.set(change.doc.id, change.doc.data());
       });
 
-      _this3.forceUpdate();
+      _this3.setState({
+        loaded: true
+      });
     }, function (error) {
-      _this3.offline = true;
-
-      _this3.forceUpdate();
+      _this3.setState({
+        offline: true,
+        loaded: true
+      });
     });
 
     return _this3;
@@ -74448,7 +74489,12 @@ var ButtonGrid = /*#__PURE__*/function (_Component2) {
     }
   }, {
     key: "render",
-    value: function render() {
+    value: function render(_ref3, _ref4) {
+      var secret = _ref3.secret,
+          incrementSecret = _ref3.incrementSecret;
+      var offline = _ref4.offline,
+          loaded = _ref4.loaded;
+      if (!loaded) return null;
       var gridCoords = (0, _helpers.getCenteredGridSquareCoords)();
       var squares = [];
 
@@ -74476,7 +74522,7 @@ var ButtonGrid = /*#__PURE__*/function (_Component2) {
 
         if (blocking) continue;
         var squareID = "gs-".concat(x, "-").concat(y);
-        var colorID = this.offline ? 0 : -1;
+        var colorID = 0;
         var numClicked = 0;
 
         if (this.gsMap.has(squareID)) {
@@ -74491,8 +74537,10 @@ var ButtonGrid = /*#__PURE__*/function (_Component2) {
           y: y,
           colorID: colorID,
           numClicked: numClicked,
-          offline: this.offline,
-          offlineHandler: this.offlineHandler.bind(this)
+          offline: offline,
+          offlineHandler: this.offlineHandler.bind(this),
+          secret: secret,
+          incrementSecret: incrementSecret
         }));
       }
 
@@ -74621,6 +74669,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -74641,25 +74691,40 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var App = /*#__PURE__*/function (_Component) {
   _inherits(App, _Component);
 
   var _super = _createSuper(App);
 
   function App() {
+    var _this;
+
     _classCallCheck(this, App);
 
-    return _super.apply(this, arguments);
+    _this = _super.call(this);
+
+    _defineProperty(_assertThisInitialized(_this), "incrementSecret", function () {
+      return _this.setState({
+        secret: _this.state.secret + 1
+      });
+    });
+
+    _this.state = {
+      secret: 0
+    };
+    return _this;
   }
 
   _createClass(App, [{
     key: "debouncedResizeHandler",
     value: function debouncedResizeHandler() {
-      var _this = this;
+      var _this2 = this;
 
       return (0, _helpers.debounce)(function (_) {
-        return _this.forceUpdate();
-      }, 5);
+        return _this2.forceUpdate();
+      }, 20);
     }
   }, {
     key: "componentDidMount",
@@ -74673,14 +74738,22 @@ var App = /*#__PURE__*/function (_Component) {
     }
   }, {
     key: "render",
-    value: function render() {
+    value: function render(_ref, _ref2) {
+      _objectDestructuringEmpty(_ref);
+
+      var secret = _ref2.secret;
       return (0, _preact.h)("div", {
         id: "app"
-      }, (0, _preact.h)(_NameCard.default, null), (0, _preact.h)(_LinkSquare.default, {
+      }, (0, _preact.h)(_NameCard.default, {
+        secret: secret
+      }), (0, _preact.h)(_LinkSquare.default, {
         linkID: 0
       }), (0, _preact.h)(_LinkSquare.default, {
         linkID: 1
-      }), (0, _preact.h)(_ButtonGrid.default, null));
+      }), (0, _preact.h)(_ButtonGrid.default, {
+        secret: secret,
+        incrementSecret: this.incrementSecret.bind(this)
+      }));
     }
   }]);
 
@@ -74731,7 +74804,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64403" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57818" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
