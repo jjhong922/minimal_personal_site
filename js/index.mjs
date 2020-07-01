@@ -1,4 +1,5 @@
-import { h, render } from 'preact';
+const h = require('preact').h;
+const render = require('preact').render;
 import './style';
 import 'preact-material-components/Button/style.css';
 import App from './components/app';

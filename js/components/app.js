@@ -14,8 +14,7 @@ export default class App extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.debouncedResizeHandler());
-  }
+    window.removeEventListener("resize", this.debouncedResizeHandler()); }
 
 	render() {
 		return (
