@@ -33,9 +33,9 @@ class GridSquare extends Component {
             offlineHandler(`gs-${x}-${y}`, (colorID + 1) % THEME_COLORS.length, numClicked + 1);
           }
           if (secret == 0 && x == 0 && y == -3) { console.log("weLcome to my hiDDen pUzzLe! gooD LUck!"); incrementSecret(); }
-          if (secret == 1 && x == -2 && y == -2) { console.log("have yoU figUReD it oUt yet?"); incrementSecret(); }
-          if (secret == 2 && x == -1 && y == -4) { console.log("oR DiD yoU jUst get LUcky?"); incrementSecret(); }
-          if (secret == 3 && x == -1 && y == -5) { console.log("oh weLL, Dis is D enD. finD yoUR RewarD heRe!"); incrementSecret(); }
+          if (secret == 1 && x == -3 && y == -2) { console.log("have yoU figUReD it oUt yet?"); incrementSecret(); }
+          if (secret == 2 && x == -2 && y == -4) { console.log("oR DiD yoU jUst get LUcky?"); incrementSecret(); }
+          if (secret == 3 && x == -2 && y == -5) { console.log("oh weLL, Dis is D enD. finD yoUR RewarD oveR heRe!"); incrementSecret(); }
         }}
       />
     );
