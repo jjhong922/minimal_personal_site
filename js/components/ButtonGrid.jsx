@@ -64,7 +64,7 @@ export default class ButtonGrid extends Component {
       let blocking = false;
       if (
         x >= NAME_CARD_COORD[0]
-        && x <= NAME_CARD_COORD[0] + 8
+        && x <= NAME_CARD_COORD[0] + 6
         && y >= NAME_CARD_COORD[1]
         && y <= NAME_CARD_COORD[1] + 1
       ) {

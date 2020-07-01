@@ -7,8 +7,8 @@ export const GRID_SQUARE_PADDING = 2;
 
 export const THEME_COLORS = ["#4357AD", "#48A9A6", "#E4DFDA", "#D4B483", "#C1666B"];
 export const DEFAULT_COLOR = "#FFFFFF";
-export const NAME_CARD_COORD = [-4, -1];
-export const LINK_COORDS = [[-3, 2], [2, 2]];
+export const NAME_CARD_COORD = [-3, -1];
+export const LINK_COORDS = [[-2, 2], [1, 2]];
 export const LINK_COLORS = ["#0E76A8", "#211F1F"];
 export const LINK_URLS = ["https://www.linkedin.com/in/hongjustin/", "https://github.com/jjhong922"];
 
