@@ -24911,9 +24911,9 @@ var THEME_COLORS = ["#4357AD", "#48A9A6", "#E4DFDA", "#D4B483", "#C1666B"];
 exports.THEME_COLORS = THEME_COLORS;
 var DEFAULT_COLOR = "#FFFFFF";
 exports.DEFAULT_COLOR = DEFAULT_COLOR;
-var NAME_CARD_COORD = [-4, -1];
+var NAME_CARD_COORD = [-3, -1];
 exports.NAME_CARD_COORD = NAME_CARD_COORD;
-var LINK_COORDS = [[-3, 2], [2, 2]];
+var LINK_COORDS = [[-2, 2], [1, 2]];
 exports.LINK_COORDS = LINK_COORDS;
 var LINK_COLORS = ["#0E76A8", "#211F1F"];
 exports.LINK_COLORS = LINK_COLORS;
@@ -74462,7 +74462,7 @@ var ButtonGrid = /*#__PURE__*/function (_Component2) {
 
         var blocking = false;
 
-        if (x >= _constants.NAME_CARD_COORD[0] && x <= _constants.NAME_CARD_COORD[0] + 8 && y >= _constants.NAME_CARD_COORD[1] && y <= _constants.NAME_CARD_COORD[1] + 1) {
+        if (x >= _constants.NAME_CARD_COORD[0] && x <= _constants.NAME_CARD_COORD[0] + 6 && y >= _constants.NAME_CARD_COORD[1] && y <= _constants.NAME_CARD_COORD[1] + 1) {
           blocking = true;
         }
 
@@ -74731,7 +74731,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49688" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64403" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
